@@ -65,7 +65,7 @@ public class UserService implements IUserService {
                 isUserAvialable.get().setIsDeleted(userDTO.getIsDeleted());
                 isUserAvialable.get().setCreatedDate(userDTO.getCreatedDate());
                 isUserAvialable.get().setUpdatedDate(userDTO.getUpdatedDate());
-                return new ResponseClass(200, "Sucessfull", isUserAvialable.get());
+                return new ResponseClass(200, "Successfull", isUserAvialable.get());
             }
             throw new UserNotFoundException(400, "User not Found");
         }
@@ -83,7 +83,7 @@ public class UserService implements IUserService {
             }
             throw new UserNotFoundException(400, "user not found");
         }
-        throw new UserNotFoundException(400, "Tokken is wrong");
+        throw new UserNotFoundException(400, "Token is wrong");
     }
 
     @Override
@@ -98,16 +98,34 @@ public class UserService implements IUserService {
             }
             throw new UserNotFoundException(400, "user not found");
         }
-        throw new UserNotFoundException(400, "token is wrong");
+        throw new UserNotFoundException(400, "Token is wrong");
     }
 
     @Override
-    public ResponseClass deleteTemp(String token, long id) {
+    public ResponseClass changePassword(String token, String password) {
         Long userId = tokenUtil.decodeToken(token);
         Optional<UserModel> isUserPresent = userRepository.findById(userId);
-        if (isUserPresent.isPresent()){
+        if (isUserPresent.isPresent()) {
+            isUserPresent.get().setPassword(password);
+            userRepository.save(isUserPresent.get());
+            return new ResponseClass(200, "Sucessfull", isUserPresent.get());
         }
-        return null;
+        throw new UserNotFoundException(400, "Token is wrong");
+    }
+
+    @Override
+    public ResponseClass resetPassword(String emailId) {
+        Optional<UserModel> isUserPresent = userRepository.findByEmailId(emailId);
+        if (isUserPresent.isPresent()){
+            String token = tokenUtil.createToken(isUserPresent.get().getId());
+            String url = "http://localhost:8090/lmsadmin/resetPassword";
+            String subject = "reset password";
+            String body = "For reset password click on this link" + url + "use this to reset password" + token;
+            mailService.send(isUserPresent.get().getEmailId(), body, subject);
+            return new ResponseClass(200, "Sucessfull", isUserPresent.get());
+
+        }
+        throw new UserNotFoundException(400, "Token is Wrong");
     }
 
 

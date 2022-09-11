@@ -18,5 +18,7 @@ public interface IUserService {
 
     ResponseClass deleteUser(long id, String token);
 
-    ResponseClass deleteTemp(String token, long id);
+    ResponseClass changePassword(String token, String password);
+
+    ResponseClass resetPassword(String emailId);
 }

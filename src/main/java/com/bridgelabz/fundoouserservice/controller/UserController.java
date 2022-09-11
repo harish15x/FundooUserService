@@ -25,7 +25,6 @@ public class UserController {
         return new ResponseEntity<>(responseClass,HttpStatus.OK);
     }
 
-
     @PostMapping("/adduser")
     public ResponseEntity<ResponseClass> addUser(@Valid @PathVariable UserDTO userDTO){
         ResponseClass responseClass = userService.addUser(userDTO);
@@ -50,10 +49,20 @@ public class UserController {
         return new ResponseEntity<>(responseClass,HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<ResponseClass> deleteTemp(@RequestHeader String token, @PathVariable long id){
-        ResponseClass responseClass = userService.deleteTemp(token, id);
+    @PutMapping("/changepassword")
+    public ResponseEntity<ResponseClass> changePassword(@RequestHeader String token, @RequestParam String password){
+        ResponseClass responseClass = userService.changePassword(token, password);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
+
+    @PutMapping("/resetPassword")
+    public ResponseEntity<ResponseClass> resetPassword(@RequestParam String emailId){
+        ResponseClass responseClass = userService.resetPassword(emailId);
+        return new ResponseEntity<>(responseClass, HttpStatus.OK);
+    }
+
+
+
+
 
 }
