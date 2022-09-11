@@ -118,7 +118,7 @@ public class UserService implements IUserService {
         Optional<UserModel> isUserPresent = userRepository.findByEmailId(emailId);
         if (isUserPresent.isPresent()){
             String token = tokenUtil.createToken(isUserPresent.get().getId());
-            String url = "http://localhost:8090/lmsadmin/resetPassword";
+            String url = "http://localhost:8090/user/resetPassword";
             String subject = "reset password";
             String body = "For reset password click on this link" + url + "use this to reset password" + token;
             mailService.send(isUserPresent.get().getEmailId(), body, subject);
@@ -126,6 +126,17 @@ public class UserService implements IUserService {
 
         }
         throw new UserNotFoundException(400, "Token is Wrong");
+    }
+
+    @Override
+    public Boolean validate(String token) {
+        Long userId = tokenUtil.decodeToken(token);
+        Optional<UserModel> isUserPresent = userRepository.findById(userId);
+        if (isUserPresent.isPresent()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 

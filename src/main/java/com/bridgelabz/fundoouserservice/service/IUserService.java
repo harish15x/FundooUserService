@@ -21,4 +21,6 @@ public interface IUserService {
     ResponseClass changePassword(String token, String password);
 
     ResponseClass resetPassword(String emailId);
+
+    Boolean validate(String token);
 }

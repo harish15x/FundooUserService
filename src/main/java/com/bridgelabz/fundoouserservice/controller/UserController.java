@@ -37,7 +37,7 @@ public class UserController {
         return new ResponseEntity<>(responseClass,HttpStatus.OK);
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/getuserdata")
     public ResponseEntity <List<?>> getUserdata(@RequestHeader String token){
         List<UserModel> responseClass = userService.getUserData(token);
         return new ResponseEntity<>(responseClass,HttpStatus.OK);
@@ -61,8 +61,9 @@ public class UserController {
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
-
-
-
+    @GetMapping("/string/{token}")
+    public Boolean validate(@PathVariable String token){
+        return userService.validate(token);
+    }
 
 }

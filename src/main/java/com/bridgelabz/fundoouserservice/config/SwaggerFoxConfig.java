@@ -69,7 +69,7 @@ public class SwaggerFoxConfig implements WebMvcConfigurer {
 
                 .select()
 
-                .apis(RequestHandlerSelectors.basePackage("com.bridgelabz.lmsadmin"))
+                .apis(RequestHandlerSelectors.basePackage("com.bridgelabz.fundoouserservice"))
 
                 .paths(PathSelectors.any())
 
