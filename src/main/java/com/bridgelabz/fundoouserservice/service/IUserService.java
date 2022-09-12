@@ -12,15 +12,21 @@ public interface IUserService {
 
     ResponseClass addUser(UserDTO userDTO);
 
-    ResponseClass updateUser(String token, UserDTO userDTO, long id);
+    ResponseClass updateUser(String token, UserDTO userDTO, long userId);
 
     List<UserModel> getUserData(String token);
 
-    ResponseClass deleteUser(long id, String token);
+    ResponseClass deleteUser(long userId, String token);
 
     ResponseClass changePassword(String token, String password);
 
     ResponseClass resetPassword(String emailId);
 
     Boolean validate(String token);
+
+    ResponseClass deletUserTemp(long userId, String token);
+
+    ResponseClass deletePermanently(long userId, String token);
+
+    ResponseClass restoreUser(long userId, String token);
 }

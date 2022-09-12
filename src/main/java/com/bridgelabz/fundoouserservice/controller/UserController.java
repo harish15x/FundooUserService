@@ -32,8 +32,8 @@ public class UserController {
     }
 
     @PutMapping("/updateuser/{id}")
-    public ResponseEntity<ResponseClass> upadateUser(@RequestHeader String token, @Valid @PathVariable UserDTO userDTO, @PathVariable long id){
-        ResponseClass responseClass = userService.updateUser(token, userDTO, id);
+    public ResponseEntity<ResponseClass> upadateUser(@RequestHeader String token, @Valid @PathVariable UserDTO userDTO, @PathVariable long userId){
+        ResponseClass responseClass = userService.updateUser(token, userDTO, userId);
         return new ResponseEntity<>(responseClass,HttpStatus.OK);
     }
 
@@ -44,8 +44,8 @@ public class UserController {
     }
 
     @DeleteMapping("deleteuser/{id}")
-    public ResponseEntity<ResponseClass> deleteUser(@PathVariable long id, @RequestHeader String token){
-        ResponseClass responseClass = userService.deleteUser(id, token);
+    public ResponseEntity<ResponseClass> deleteUser(@PathVariable long userId, @RequestHeader String token){
+        ResponseClass responseClass = userService.deleteUser(userId, token);
         return new ResponseEntity<>(responseClass,HttpStatus.OK);
     }
 
@@ -58,6 +58,24 @@ public class UserController {
     @PutMapping("/resetPassword")
     public ResponseEntity<ResponseClass> resetPassword(@RequestParam String emailId){
         ResponseClass responseClass = userService.resetPassword(emailId);
+        return new ResponseEntity<>(responseClass, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteusertemp")
+    public ResponseEntity<ResponseClass> deletUserTemp(@PathVariable long userId, @RequestHeader String token){
+        ResponseClass responseClass = userService.deletUserTemp(userId, token);
+        return new ResponseEntity<>(responseClass, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deletepermanently")
+    public ResponseEntity<ResponseClass> deletePermanently(@PathVariable long userId, @RequestHeader String token){
+        ResponseClass responseClass = userService.deletePermanently(userId, token);
+        return new ResponseEntity<>(responseClass, HttpStatus.OK);
+    }
+
+    @PutMapping("/restore")
+    public ResponseEntity<ResponseClass> restore(@PathVariable long userId, @RequestHeader String token){
+        ResponseClass responseClass = userService.restoreUser(userId, token);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 

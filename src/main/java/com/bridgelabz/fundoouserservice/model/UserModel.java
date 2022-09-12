@@ -20,9 +20,9 @@ public class UserModel {
     private String password;
     private int mobileNumber;
     private String profilePic;
-    private String isActive;
-    private String isDeleted;
     private Date DOB;
+    private boolean isActive;
+    private boolean isDeleted;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
@@ -33,11 +33,7 @@ public class UserModel {
         this.password = userDTO.getPassword();
         this.mobileNumber = userDTO.getMobileNumber();
         this.profilePic = userDTO.getProfilePic();
-        this.isActive = userDTO.getIsActive();
-        this.isDeleted = userDTO.getIsDeleted();
         this.DOB = userDTO.getDOB();
-        this.createdDate = LocalDateTime.now();
-        this.updatedDate = LocalDateTime.now();
 
     }
 

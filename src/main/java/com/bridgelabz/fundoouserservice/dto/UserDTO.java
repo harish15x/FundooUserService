@@ -13,10 +13,6 @@ public class UserDTO {
     private String password;
     private int mobileNumber;
     private String profilePic;
-    private String isActive;
-    private String isDeleted;
     private Date DOB;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
 
 }

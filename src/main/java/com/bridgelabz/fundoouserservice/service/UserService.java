@@ -50,21 +50,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseClass updateUser(String token, UserDTO userDTO, long id) {
-        Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isUserPresent = userRepository.findById(userId);
+    public ResponseClass updateUser(String token, UserDTO userDTO, long userId) {
+        Long userToken = tokenUtil.decodeToken(token);
+        Optional<UserModel> isUserPresent = userRepository.findById(userToken);
         if (isUserPresent.isPresent()) {
-            Optional<UserModel> isUserAvialable = userRepository.findById(id);
+            Optional<UserModel> isUserAvialable = userRepository.findById(userId);
             if (isUserAvialable.isPresent()) {
                 isUserAvialable.get().setName(userDTO.getName());
                 isUserAvialable.get().setEmailId(userDTO.getEmailId());
                 isUserAvialable.get().setPassword(userDTO.getPassword());
                 isUserAvialable.get().setMobileNumber(userDTO.getMobileNumber());
                 isUserAvialable.get().setProfilePic(userDTO.getProfilePic());
-                isUserAvialable.get().setIsActive(userDTO.getIsActive());
-                isUserAvialable.get().setIsDeleted(userDTO.getIsDeleted());
-                isUserAvialable.get().setCreatedDate(userDTO.getCreatedDate());
-                isUserAvialable.get().setUpdatedDate(userDTO.getUpdatedDate());
+                isUserAvialable.get().setUpdatedDate(LocalDateTime.now());
                 return new ResponseClass(200, "Successfull", isUserAvialable.get());
             }
             throw new UserNotFoundException(400, "User not Found");
@@ -74,8 +71,8 @@ public class UserService implements IUserService {
 
     @Override
     public List<UserModel> getUserData(String token) {
-        Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isUserPresent = userRepository.findById(userId);
+        Long userToken = tokenUtil.decodeToken(token);
+        Optional<UserModel> isUserPresent = userRepository.findById(userToken);
         if (isUserPresent.isPresent()) {
             List<UserModel> isUserAvailable = userRepository.findAll();
             if (isUserAvailable.size() > 0) {
@@ -87,11 +84,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseClass deleteUser(long id, String token) {
-        Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isUserPresent = userRepository.findById(userId);
+    public ResponseClass deleteUser(long userId, String token) {
+        Long userToken = tokenUtil.decodeToken(token);
+        Optional<UserModel> isUserPresent = userRepository.findById(userToken);
         if (isUserPresent.isPresent()) {
-            Optional<UserModel> isUserAvailable = userRepository.findById(id);
+            Optional<UserModel> isUserAvailable = userRepository.findById(userId);
             if (isUserAvailable.isPresent()) {
                 userRepository.save(isUserAvailable.get());
                 return new ResponseClass(200, "Sucessfull", isUserAvailable.get());
@@ -103,8 +100,8 @@ public class UserService implements IUserService {
 
     @Override
     public ResponseClass changePassword(String token, String password) {
-        Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isUserPresent = userRepository.findById(userId);
+        Long userToken = tokenUtil.decodeToken(token);
+        Optional<UserModel> isUserPresent = userRepository.findById(userToken);
         if (isUserPresent.isPresent()) {
             isUserPresent.get().setPassword(password);
             userRepository.save(isUserPresent.get());
@@ -128,6 +125,7 @@ public class UserService implements IUserService {
         throw new UserNotFoundException(400, "Token is Wrong");
     }
 
+
     @Override
     public Boolean validate(String token) {
         Long userId = tokenUtil.decodeToken(token);
@@ -137,6 +135,55 @@ public class UserService implements IUserService {
         }else{
             return false;
         }
+    }
+
+    @Override
+    public ResponseClass deletUserTemp(long userId, String token) {
+        Long userToken = tokenUtil.decodeToken(token);
+        Optional<UserModel> isUserPresent = userRepository.findById(userToken);
+        if (isUserPresent.isPresent()){
+            Optional<UserModel> isUserAvailabel = userRepository.findById(userId);
+            if(isUserAvailabel.isPresent()){
+                isUserAvailabel.get().setActive(false);
+                isUserAvailabel.get().setDeleted(true);
+                userRepository.save(isUserAvailabel.get());
+                return new ResponseClass(200, "sucessfull", isUserAvailabel.get());
+            }
+            throw new UserNotFoundException(400, "User not found");
+        }
+        throw new UserNotFoundException(400, "token is wrong");
+    }
+
+    @Override
+    public ResponseClass deletePermanently(long userId, String token) {
+        Long userToken = tokenUtil.decodeToken(token);
+        Optional<UserModel> isUserPresent = userRepository.findById(userToken);
+        if (isUserPresent.isPresent()){
+            Optional<UserModel> isUserAvailable = userRepository.findById(userId);
+            if (isUserAvailable.isPresent()){
+                userRepository.save(isUserAvailable.get());
+                return new ResponseClass(200, "Sucessfull", isUserAvailable.get());
+            }
+            throw new UserNotFoundException(400, "user not found");
+        }
+        throw new UserNotFoundException(400, "token is wrong");
+    }
+
+    @Override
+    public ResponseClass restoreUser(long userId, String token) {
+        Long userToken = tokenUtil.decodeToken(token);
+        Optional<UserModel> isUserPresent = userRepository.findById(userToken);
+        if (isUserPresent.isPresent()){
+            Optional<UserModel> isUserAvailable = userRepository.findById(userId);
+            if (isUserAvailable.isPresent()){
+                isUserPresent.get().setActive(true);
+                isUserAvailable.get().setDeleted(false);
+                userRepository.save(isUserAvailable.get());
+                return new ResponseClass(200, "Sucessfull", isUserAvailable.get());
+            }
+            throw new UserNotFoundException(400, "user not found");
+        }
+        throw new UserNotFoundException(400, "token is wrong");
     }
 
 
