@@ -19,7 +19,8 @@ public class UserModel {
     private String emailId;
     private String password;
     private int mobileNumber;
-    private String profilePic;
+    @Lob
+    private byte[] profilePic;
     private Date DOB;
     private boolean isActive;
     private boolean isDeleted;
@@ -32,7 +33,6 @@ public class UserModel {
         this.emailId = userDTO.getEmailId();
         this.password = userDTO.getPassword();
         this.mobileNumber = userDTO.getMobileNumber();
-        this.profilePic = userDTO.getProfilePic();
         this.DOB = userDTO.getDOB();
 
     }

@@ -3,7 +3,9 @@ package com.bridgelabz.fundoouserservice.service;
 import com.bridgelabz.fundoouserservice.dto.UserDTO;
 import com.bridgelabz.fundoouserservice.model.UserModel;
 import com.bridgelabz.fundoouserservice.util.ResponseClass;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IUserService {
@@ -29,4 +31,8 @@ public interface IUserService {
     ResponseClass deletePermanently(long userId, String token);
 
     ResponseClass restoreUser(long userId, String token);
+
+    ResponseClass addProfilePic(long id, MultipartFile profilePic)throws IOException;
+
+    Boolean validateEmail(String emailId);
 }

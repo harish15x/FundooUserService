@@ -4,11 +4,14 @@ import com.bridgelabz.fundoouserservice.dto.UserDTO;
 import com.bridgelabz.fundoouserservice.exception.UserNotFoundException;
 import com.bridgelabz.fundoouserservice.model.UserModel;
 import com.bridgelabz.fundoouserservice.repository.UserRepository;
+import com.bridgelabz.fundoouserservice.util.Response;
 import com.bridgelabz.fundoouserservice.util.ResponseClass;
 import com.bridgelabz.fundoouserservice.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +49,7 @@ public class UserService implements IUserService {
         String body = "User has been added sucessfully " + userModel.getId();
         String subject = "User registration completed";
         mailService.send(userModel.getEmailId(), body, subject);
-        return new ResponseClass(200, "Successful", userModel);
+        return new ResponseClass(200, "Successfull", userModel);
     }
 
     @Override
@@ -60,7 +63,6 @@ public class UserService implements IUserService {
                 isUserAvialable.get().setEmailId(userDTO.getEmailId());
                 isUserAvialable.get().setPassword(userDTO.getPassword());
                 isUserAvialable.get().setMobileNumber(userDTO.getMobileNumber());
-                isUserAvialable.get().setProfilePic(userDTO.getProfilePic());
                 isUserAvialable.get().setUpdatedDate(LocalDateTime.now());
                 return new ResponseClass(200, "Successfull", isUserAvialable.get());
             }
@@ -186,5 +188,23 @@ public class UserService implements IUserService {
         throw new UserNotFoundException(400, "token is wrong");
     }
 
+    @Override
+    public ResponseClass addProfilePic(long id, MultipartFile profilePic) throws IOException {
+        Optional<UserModel> isUserPresent = userRepository.findById(id);
+        if (isUserPresent.isPresent()){
+            isUserPresent.get().setProfilePic(profilePic.getBytes());
+            return new ResponseClass(200, "Successfully", isUserPresent.get());
+        }
+        return null;
+    }
 
+    @Override
+    public Boolean validateEmail(String emailId) {
+        Optional<UserModel> isEmailPresent = userRepository.findByEmailId(emailId);
+        if (isEmailPresent.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

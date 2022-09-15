@@ -3,13 +3,16 @@ package com.bridgelabz.fundoouserservice.controller;
 import com.bridgelabz.fundoouserservice.dto.UserDTO;
 import com.bridgelabz.fundoouserservice.model.UserModel;
 import com.bridgelabz.fundoouserservice.service.IUserService;
+import com.bridgelabz.fundoouserservice.util.Response;
 import com.bridgelabz.fundoouserservice.util.ResponseClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -79,9 +82,20 @@ public class UserController {
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
+    @PostMapping("/addprofilepic{id}")
+    public ResponseEntity<ResponseClass> addProfilePic(@PathVariable long id, @RequestParam(value = "File") MultipartFile profilePic) throws IOException {
+        ResponseClass responseClass = userService.addProfilePic(id, profilePic);
+        return new ResponseEntity<>(responseClass, HttpStatus.OK);
+    }
+
     @GetMapping("/string/{token}")
     public Boolean validate(@PathVariable String token){
         return userService.validate(token);
+    }
+
+    @GetMapping("/validateemail")
+    public Boolean validateEmail(@PathVariable String emailId){
+        return userService.validateEmail(emailId);
     }
 
 }
