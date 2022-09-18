@@ -32,7 +32,7 @@ public interface IUserService {
 
     ResponseClass restoreUser(long userId, String token);
 
-    ResponseClass addProfilePic(long id, MultipartFile profilePic)throws IOException;
+    ResponseClass addProfilePic(long userId, MultipartFile profilePic)throws IOException;
 
     Boolean validateEmail(String emailId);
 }

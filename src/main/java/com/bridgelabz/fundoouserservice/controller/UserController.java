@@ -34,7 +34,7 @@ public class UserController {
         return new ResponseEntity<>(responseClass , HttpStatus.OK);
     }
 
-    @PutMapping("/updateuser/{id}")
+    @PutMapping("/updateuser/{userId}")
     public ResponseEntity<ResponseClass> upadateUser(@RequestHeader String token, @Valid @PathVariable UserDTO userDTO, @PathVariable long userId){
         ResponseClass responseClass = userService.updateUser(token, userDTO, userId);
         return new ResponseEntity<>(responseClass,HttpStatus.OK);
@@ -46,7 +46,7 @@ public class UserController {
         return new ResponseEntity<>(responseClass,HttpStatus.OK);
     }
 
-    @DeleteMapping("deleteuser/{id}")
+    @DeleteMapping("deleteuser/{userId}")
     public ResponseEntity<ResponseClass> deleteUser(@PathVariable long userId, @RequestHeader String token){
         ResponseClass responseClass = userService.deleteUser(userId, token);
         return new ResponseEntity<>(responseClass,HttpStatus.OK);
@@ -82,9 +82,9 @@ public class UserController {
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
-    @PostMapping("/addprofilepic{id}")
-    public ResponseEntity<ResponseClass> addProfilePic(@PathVariable long id, @RequestParam(value = "File") MultipartFile profilePic) throws IOException {
-        ResponseClass responseClass = userService.addProfilePic(id, profilePic);
+    @PostMapping("/addprofilepic{userId}")
+    public ResponseEntity<ResponseClass> addProfilePic(@PathVariable long userId, @RequestParam(value = "File") MultipartFile profilePic) throws IOException {
+        ResponseClass responseClass = userService.addProfilePic(userId, profilePic);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
